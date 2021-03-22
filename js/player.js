@@ -44,15 +44,100 @@
             }
             callback.call(undefined, succeed);
         },
+        checkOverlap: function (x, y, ship){
+            let i = 0;
+            if (ship.getId() == 1 || ship.getId() == 2)
+            {
+                i = -2;
+                while (i + 2 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                    return false;
+                    else i += 1;
+                }
+            }
+            if (ship.getId() == 3)
+            {           
+                i = -2;
+                while (i + 2 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                    return false;
+                    else i += 1;
+                }
+            }
+            if (ship.getId() == 4)
+            {
+                i = -1;
+                while (i + 1 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                        return false;
+                    else i++;
+                }
+            }
+            return true;
+        },
         setActiveShipPosition: function (x, y) {
             var ship = this.fleet[this.activeShip];
             var i = 0;
-
-            while (i < ship.getLife()) {
-                this.grid[y][x + i] = ship.getId();
-                i += 1;
+            if (ship.getId() == 1 || ship.getId() == 2)
+            {
+                i = i -2;
+                if (x >= 2 && x <= 7)
+                {
+                    if(this.checkOverlap(x, y, ship))
+                    {
+                        while (i + 2 < ship.getLife()) {
+                            this.grid[y][x + i] = ship.getId();
+                            i += 1;
+                        }
+                    }
+                    else
+                    {
+                        return false
+                    }
+                }
+                else 
+                {
+                    return false
+                }
             }
-
+            if (ship.getId() == 3)
+            {
+                i = i -2;
+                if (x >= 2 && x <= 8)
+                {
+                    if(this.checkOverlap(x, y, ship))
+                    {
+                        while (i + 2 < ship.getLife()) {
+                            this.grid[y][x + i] = ship.getId();
+                            i += 1;
+                        }
+                    }
+                    else return false
+                }
+                else 
+                {
+                    return false
+                }
+            }
+            if (ship.getId() == 4)
+            {
+                i = i -1;
+                if (x >= 1  && x <= 8)
+                {
+                    if(this.checkOverlap(x, y, ship))
+                    {
+                        while (i + 1 < ship.getLife()) {
+                            this.grid[y][x + i] = ship.getId();
+                            i += 1;
+                        }
+                    }
+                    else return false
+                }
+                else
+                {
+                    return false
+                }
+            }
             return true;
         },
         

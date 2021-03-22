@@ -218,13 +218,11 @@
             this.players[0].renderTries(this.grid);
         },
         renderMiniMap: function () {
-            console.log(player.grid)
             this.miniGrid = player.grid;
             let i = 0;
             let miniGridCellDom = document.querySelectorAll('.cell');
             this.miniGrid.forEach(line => 
                 line.forEach(cell => {
-                    i++;
                     if (cell == 1)
                     {
                         miniGridCellDom[i].style.backgroundColor = "#e60019";
@@ -241,6 +239,7 @@
                     {
                         miniGridCellDom[i].style.backgroundColor = "#203140";
                     }
+                    i++;
                 })
             )
         }

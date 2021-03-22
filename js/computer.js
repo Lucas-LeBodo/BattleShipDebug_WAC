@@ -21,9 +21,6 @@
             this.obj = obj;
            return this.obj;
         },
-        removeChild: function (dom) {
-            console.log("ici")
-        },
         areShipsOk: function (callback) {
             var i = 0;
             var j;
