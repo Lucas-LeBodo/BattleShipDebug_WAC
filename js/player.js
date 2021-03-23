@@ -140,7 +140,9 @@
             }
             return true;
         },
-        
+        isShipOk: function () {
+
+        },
         clearPreview: function () {
             this.fleet.forEach(function (sheep) {
                 if (sheep.dom.parentNode) {
