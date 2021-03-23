@@ -21,17 +21,89 @@
             this.obj = obj;
            return this.obj;
         },
-        areShipsOk: function (callback) {
-            var i = 0;
-            var j;
-
-            this.fleet[i].forEach(function (ship, i) {
-                j = 0;
-                while (j < ship.life) {
-                    this.grid[i][j] = ship.getId();
-                    j += 1;
+        checkOverlap: function (x, y, ship){
+            let i = 0;
+            if (ship.getId() == 5 || ship.getId() == 6)
+            {
+                i = -2;
+                while (i + 2 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                    return false;
+                    else i += 1;
                 }
-            }, this);
+            }
+            if (ship.getId() == 7)
+            {           
+                i = -2;
+                while (i + 2 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                    return false;
+                    else i += 1;
+                }
+            }
+            if (ship.getId() == 8)
+            {
+                i = -1;
+                while (i + 1 < ship.getLife()) {
+                    if (this.grid[y][x + i] != 0)
+                        return false;
+                    else i++;
+                }
+            }
+            return true;
+        },
+        areShipsOk: function (callback) {
+            var y = 0;
+            var x;
+            let i = 0;
+            this.fleet.forEach(function (ship, i) {
+                if (ship.getId() == 5 || ship.getId() == 6)
+                {
+                    x = Math.floor(Math.random() * (7 - 2) + 2);
+                    y = Math.floor(Math.random() * (9 - 0) + 0);
+                    while(this.checkOverlap(x, y, ship) == false)
+                    {
+                        x = Math.floor(Math.random() * (7 - 2) + 2);
+                        y = Math.floor(Math.random() * (9 - 0) + 0); 
+                    }
+                    i = -2;
+                    while (i + 2 < ship.life) {
+                        this.grid[y][x + i] = ship.getId();
+                        i += 1;
+                    }
+                }
+                if (ship.getId() == 7)
+                {
+                    x = Math.floor(Math.random() * (8 - 2) + 2);
+                    y = Math.floor(Math.random() * (9 - 0) + 0);
+                    while(this.checkOverlap(x, y, ship) == false)
+                    {
+                        x = Math.floor(Math.random() * (8 - 2) + 2);
+                        y = Math.floor(Math.random() * (9 - 0) + 0); 
+                    }
+                    i = -2;
+                    while (i + 2 < ship.life) {
+                        this.grid[y][x + i] = ship.getId();
+                        i += 1;
+                    }
+                }
+                if (ship.getId() == 8)
+                {
+                    x = Math.floor(Math.random() * (8 - 2) + 2);
+                    y = Math.floor(Math.random() * (9 - 0) + 0); 
+                    while(this.checkOverlap(x, y, ship) == false)
+                    {
+                        x = Math.floor(Math.random() * (8 - 2) + 2);
+                        y = Math.floor(Math.random() * (9 - 0) + 0); 
+                    }
+                    i = -1;
+                    while (i + 1 < ship.life) {
+                        this.grid[y][x + i] = ship.getId();
+                        i += 1;
+                    }
+                }
+             }, this);
+            console.log(this.grid)
 
             setTimeout(function () {
                 callback();
