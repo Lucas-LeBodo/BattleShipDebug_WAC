@@ -88,7 +88,7 @@
             case this.PHASE_INIT_OPPONENT:
                 this.wait();
                 utils.info("En attente de votre adversaire");
-                this.players[1].isShipOk(function () {
+                this.players[1].areShipsOk(function () {
                     self.stopWaiting();
                     self.goNextPhase();
                 });
@@ -224,21 +224,13 @@
             this.miniGrid.forEach(line => 
                 line.forEach(cell => {
                     if (cell == 1)
-                    {
                         miniGridCellDom[i].style.backgroundColor = "#e60019";
-                    }
                     if (cell == 2)
-                    {
                         miniGridCellDom[i].style.backgroundColor = "#577cc2";
-                    }
                     if (cell == 3)
-                    {
                         miniGridCellDom[i].style.backgroundColor = "#56988c";
-                    }
                     if (cell == 4)
-                    {
                         miniGridCellDom[i].style.backgroundColor = "#203140";
-                    }
                     i++;
                 })
             )
