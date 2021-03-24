@@ -103,6 +103,7 @@
             }
         },
         gameIsOver: function () {
+            
             return false;
         },
         getPhase: function () {
@@ -186,15 +187,15 @@
 
             // determine qui est l'attaquant et qui est attaqué
             var target = this.players.indexOf(from) === 0 ? this.players[1] : this.players[0];
-
+            console.log(target.grid)
             if (this.currentPhase === this.PHASE_PLAY_OPPONENT) {
+                this.players[0].checkSunkShip(target.grid);
                 msg += "Votre adversaire vous a... ";
             }
 
             // on demande à l'attaqué si il a un bateaux à la position visée
             // le résultat devra être passé en paramètre à la fonction de callback (3e paramètre)
             target.receiveAttack(col, line, function (hasSucceed) {
-                console.log(hasSucceed)
                 if (hasSucceed === true) 
                 {
                     msg += "Touché !";
@@ -215,7 +216,7 @@
                 setTimeout(function () {
                     self.stopWaiting();
                     self.goNextPhase();
-                }, 1000);
+                }, 1);
             });
 
         },

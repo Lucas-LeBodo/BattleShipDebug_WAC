@@ -15,12 +15,25 @@
         play: function () {
             var self = this;
             setTimeout(function () {
-                let col = Math.floor(Math.random() * (9 - 0) + 0);
-                let line = Math.floor(Math.random() * (9 - 0) + 0);
+                let col = Math.floor(Math.random() * (10 - 0) + 0);
+                let line = Math.floor(Math.random() * (10 - 0) + 0);
+                let GridCellDom = document.querySelectorAll('.cell');
+                let i = 0;
+                while (self.tries[col][line] === false || self.tries[col][line] === true)
+                {
+                    col = Math.floor(Math.random() * (10 - 0) + 0);
+                    line = Math.floor(Math.random() * (10 - 0) + 0);
+                }
                 self.game.fire(self, line, col, function (hasSucced) {
-                    self.tries[line][col] = hasSucced;
+                    self.tries[col][line] = hasSucced;
+                    self.tries.forEach(line => 
+                        line.forEach(cell => {
+                            if (cell === true)
+                                GridCellDom[i].style.backgroundColor = "black";
+                            i++;
+                        }))
                 });
-            }, 2000);
+            }, 1);
         },
         checkOverlap: function (x, y, ship){
             let i = 0;
@@ -106,7 +119,7 @@
              }, this);
             setTimeout(function () {
                 callback();
-            }, 500);
+            }, 1);
         }
     });
 
