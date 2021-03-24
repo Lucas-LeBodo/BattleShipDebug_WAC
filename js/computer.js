@@ -9,17 +9,18 @@
         tries: [],
         fleet: [],
         game: null,
+        setGame: function (obj) {
+            this.game = obj;
+        },
         play: function () {
             var self = this;
             setTimeout(function () {
-                self.game.fire(this, 0, 0, function (hasSucced) {
-                    self.tries[0][0] = hasSucced;
+                let col = Math.floor(Math.random() * (9 - 0) + 0);
+                let line = Math.floor(Math.random() * (9 - 0) + 0);
+                self.game.fire(self, line, col, function (hasSucced) {
+                    self.tries[line][col] = hasSucced;
                 });
             }, 2000);
-        },
-        setGame: function (obj) {
-            this.obj = obj;
-           return this.obj;
         },
         checkOverlap: function (x, y, ship){
             let i = 0;
@@ -103,8 +104,6 @@
                     }
                 }
              }, this);
-            console.log(this.grid)
-
             setTimeout(function () {
                 callback();
             }, 500);

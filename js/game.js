@@ -42,7 +42,7 @@
                 this.PHASE_PLAY_OPPONENT,
                 this.PHASE_GAME_OVER
             ];
-            this.playerTurnPhaseIndex = 0;
+            this.playerTurnPhaseIndex = 2;
 
             // initialise les joueurs
             this.setupPlayers();
@@ -68,20 +68,14 @@
             // récupération du numéro d'index de la phase courante
             var ci = this.phaseOrder.indexOf(this.currentPhase);
             var self = this;
-
             if (ci !== this.phaseOrder.length - 1) {
                 this.currentPhase = this.phaseOrder[ci + 1];
+
             } else {
                 this.currentPhase = this.phaseOrder[0];
             }
 
             switch (this.currentPhase) {
-            case this.PHASE_GAME_OVER:
-                // detection de la fin de partie
-                if (!this.gameIsOver()) {
-                    // le jeu n'est pas terminé on recommence un tour de jeu
-                    this.currentPhase = this.phaseOrder[this.playerTurnPhaseIndex];
-                }
             case this.PHASE_INIT_PLAYER:
                 utils.info("Placez vos bateaux");
                 break;
@@ -100,8 +94,13 @@
                 utils.info("A votre adversaire de jouer...");
                 this.players[1].play();
                 break;
+            case this.PHASE_GAME_OVER:
+                // detection de la fin de partie
+                if (!this.gameIsOver()) {
+                    // le jeu n'est pas terminé on recommence un tour de jeu
+                    this.currentPhase = this.phaseOrder[this.playerTurnPhaseIndex];
+                }
             }
-
         },
         gameIsOver: function () {
             return false;
@@ -170,7 +169,11 @@
                     }
                 // si on est dans la phase de jeu (du joueur humain)
                 } else if (this.getPhase() === this.PHASE_PLAY_PLAYER) {
-                    this.players[0].play(utils.eq(e.target), utils.eq(e.target.parentNode));
+                    let check = this.players[0].play(utils.eq(e.target), utils.eq(e.target.parentNode));
+                    if (check == 5)
+                    {
+                        utils.info("Vous avez déja essayer de tirer ici");
+                    }
                 }
             }
         },
@@ -182,9 +185,7 @@
             var msg = "";
 
             // determine qui est l'attaquant et qui est attaqué
-            var target = this.players.indexOf(from) === 0
-                ? this.players[1]
-                : this.players[0];
+            var target = this.players.indexOf(from) === 0 ? this.players[1] : this.players[0];
 
             if (this.currentPhase === this.PHASE_PLAY_OPPONENT) {
                 msg += "Votre adversaire vous a... ";
@@ -193,9 +194,13 @@
             // on demande à l'attaqué si il a un bateaux à la position visée
             // le résultat devra être passé en paramètre à la fonction de callback (3e paramètre)
             target.receiveAttack(col, line, function (hasSucceed) {
-                if (hasSucceed) {
+                console.log(hasSucceed)
+                if (hasSucceed === true) 
+                {
                     msg += "Touché !";
-                } else {
+                } 
+                else if (hasSucceed === false) 
+                {
                     msg += "Manqué...";
                 }
 

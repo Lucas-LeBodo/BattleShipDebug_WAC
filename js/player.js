@@ -25,24 +25,39 @@
             this.tries = utils.createGrid(10, 10);
         },
         setGame: function (obj) {
-             this.obj = obj;
-            return this.obj;
+             this.game = obj;
         },
         play: function (col, line) {
             // appel la fonction fire du game, et lui passe une calback pour récupérer le résultat du tir
+            if (this.tries[line][col] === true || this.tries[line][col] === false)
+                {
+                    return 5;
+                }
             this.game.fire(this, col, line, _.bind(function (hasSucced) {
+                let i = 0;
+                console.log(this.tries)
+                
+                let GridCellDom = document.querySelectorAll('.main-grid .row .cell');
                 this.tries[line][col] = hasSucced;
+                this.tries.forEach(line => 
+                    line.forEach(cell => {
+                        if (cell === true)
+                            GridCellDom[i].style.backgroundColor = "red";
+                        if (cell === false)
+                            GridCellDom[i].style.backgroundColor = "grey";
+                        i++;
+                    }))
             }, this));
+            return 0;
         },
         // quand il est attaqué le joueur doit dire si il a un bateaux ou non à l'emplacement choisi par l'adversaire
         receiveAttack: function (col, line, callback) {
             var succeed = false;
-
-            if (this.grid[line][col] !== 0) {
+            if (this.grid[line][col] != 0) {
                 succeed = true;
-                this.grid[line][col] = 0;
             }
             callback.call(undefined, succeed);
+            this.grid[line][col] = succeed;
         },
         checkOverlap: function (x, y, ship){
             let i = 0;
