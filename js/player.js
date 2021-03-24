@@ -35,7 +35,6 @@
                 }
             this.game.fire(this, col, line, _.bind(function (hasSucced) {
                 let i = 0;
-                console.log(this.tries)
                 
                 let GridCellDom = document.querySelectorAll('.main-grid .row .cell');
                 this.tries[line][col] = hasSucced;
@@ -58,6 +57,57 @@
             }
             callback.call(undefined, succeed);
             this.grid[line][col] = succeed;
+        },
+        checkSunkShip: function (grid)
+        {
+            let battleship = 0;
+            let destroyer = 0;
+            let submarine = 0;
+            let small_ship = 0;
+
+            grid.forEach(line => 
+                line.forEach(cell => {
+                    if (cell === 1)
+                    {
+                        battleship++;
+                    }
+                    if (cell === 2)
+                        destroyer++;
+                    if (cell === 3)
+                        submarine++;
+                    if (cell === 4)
+                        small_ship++;
+                }))
+            if (battleship == 0 || destroyer == 0 || submarine == 0 || small_ship == 0)
+                this.addSunkClass(battleship, destroyer, submarine, small_ship);
+                
+        },
+        addSunkClass: function (battleship, destroyer, submarine, small_ship)
+        {
+            if (battleship == 0)
+            {
+                let battleshipDom = document.querySelector('.battleship');
+                battleshipDom.classList.remove("sunk");
+                battleshipDom.classList.add("sunk");
+            }
+            if (destroyer == 0)
+            {
+                let destroyerDom = document.querySelector('.destroyer');
+                destroyerDom.classList.remove("sunk");
+                destroyerDom.classList.add("sunk");
+            }
+            if (submarine == 0)
+            {
+                let submarineDom = document.querySelector('.submarine');
+                submarineDom.classList.remove("sunk");
+                submarineDom.classList.add("sunk");
+            }
+            if (small_ship == 0)
+            {
+                let small_shipDom = document.querySelector('.small-ship');
+                small_shipDom.classList.remove("sunk");
+                small_shipDom.classList.add("sunk");
+            }
         },
         checkOverlap: function (x, y, ship){
             let i = 0;
