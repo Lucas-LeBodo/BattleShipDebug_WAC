@@ -6,7 +6,10 @@
 
     var sheep = {dom: {parentNode: {removeChild: function () {
     }}}};
-
+    var fail = new Audio();
+    var touch = new Audio();
+    touch.src ='sounds/touch.mp3'
+    fail.src = 'sounds/zut.mp3';
     var player = {
         grid: [],
         tries: [],
@@ -38,12 +41,19 @@
                 
                 let GridCellDom = document.querySelectorAll('.main-grid .row .cell');
                 this.tries[line][col] = hasSucced;
+                if(hasSucced === true){
+                    touch.play();
+                } else if(hasSucced === false) {
+                    fail.play();
+                }
                 this.tries.forEach(line => 
                     line.forEach(cell => {
-                        if (cell === true)
+                        if (cell === true){
                             GridCellDom[i].style.backgroundColor = "red";
-                        if (cell === false)
+                        }
+                        if (cell === false){
                             GridCellDom[i].style.backgroundColor = "grey";
+                        }
                         i++;
                     }))
             }, this));
