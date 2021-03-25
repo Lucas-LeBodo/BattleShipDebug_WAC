@@ -12,6 +12,10 @@
         setGame: function (obj) {
             this.game = obj;
         },
+        getGrid: function ()
+        {
+            return this.grid;
+        },
         play: function () {
             var self = this;
             setTimeout(function () {
@@ -33,7 +37,7 @@
                             i++;
                         }))
                 });
-            }, 1);
+            }, 500);
         },
         checkOverlap: function (x, y, ship){
             let i = 0;
@@ -119,7 +123,7 @@
              }, this);
             setTimeout(function () {
                 callback();
-            }, 1);
+            }, 500);
         }
     });
 

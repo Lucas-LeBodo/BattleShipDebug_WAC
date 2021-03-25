@@ -33,8 +33,12 @@
             // initialisation
             this.grid = document.querySelector('.board .main-grid');
             this.miniGrid = document.querySelector('.board .mini-grid');
+            this.computerButton = document.querySelector('.computer');
+            this.playerButton = document.querySelector('.player');
+            this.randomizedButton = document.querySelector('.randomized');
+            this.selectDom = document.querySelector('.select');
+            let self = this;
 
-            // défini l'ordre des phase de jeu
             this.phaseOrder = [
                 this.PHASE_INIT_PLAYER,
                 this.PHASE_INIT_OPPONENT,
@@ -42,7 +46,62 @@
                 this.PHASE_PLAY_OPPONENT,
                 this.PHASE_GAME_OVER
             ];
+
+            // défini l'ordre des phase de jeu
+
             this.playerTurnPhaseIndex = 2;
+
+            this.selectDom.innerHTML = "Joueur";
+
+            this.computerButton.addEventListener('click', function (event) {
+                self.selectDom.innerHTML = "Ordinateur";
+                self.phaseOrder = [
+                    self.PHASE_INIT_PLAYER,
+                    self.PHASE_INIT_OPPONENT,
+                    self.PHASE_PLAY_OPPONENT,
+                    self.PHASE_PLAY_PLAYER,
+                    self.PHASE_GAME_OVER
+                ];
+                self.playerTurnPhaseIndex = 2;
+            });
+
+            this.playerButton.addEventListener('click', function (event) {
+                self.selectDom.innerHTML = "Joueur";
+                self.phaseOrder = [
+                    self.PHASE_INIT_PLAYER,
+                    self.PHASE_INIT_OPPONENT,
+                    self.PHASE_PLAY_PLAYER,
+                    self.PHASE_PLAY_OPPONENT,
+                    self.PHASE_GAME_OVER
+                ];
+            })
+
+            this.randomizedButton.addEventListener('click', function(event){
+                let i = Math.round(Math.random() * 10);
+                if(i <= 5)
+                {
+                    self.selectDom.innerHTML = "Joueur";
+                    self.phaseOrder = [
+                        self.PHASE_INIT_PLAYER,
+                        self.PHASE_INIT_OPPONENT,
+                        self.PHASE_PLAY_PLAYER,
+                        self.PHASE_PLAY_OPPONENT,
+                        self.PHASE_GAME_OVER
+                    ];
+                }
+                if (i >= 5)
+                {
+                    self.selectDom.innerHTML = "Ordinateur";
+                    self.phaseOrder = [
+                        self.PHASE_INIT_PLAYER,
+                        self.PHASE_INIT_OPPONENT,
+                        self.PHASE_PLAY_OPPONENT,
+                        self.PHASE_PLAY_PLAYER,
+                        self.PHASE_GAME_OVER
+                    ];
+                    self.playerTurnPhaseIndex = 2;
+                }
+            })
 
             // initialise les joueurs
             this.setupPlayers();
@@ -52,6 +111,9 @@
 
             // c'est parti !
             this.goNextPhase();
+        },
+        setOrder: function (tab) {
+            this.phaseOrder = tab;
         },
         setupPlayers: function () {
             // donne aux objets player et computer une réference vers l'objet game
@@ -66,7 +128,7 @@
         },
         goNextPhase: function () {
             // récupération du numéro d'index de la phase courante
-            var ci = this.phaseOrder.indexOf(this.currentPhase);
+                var ci = this.phaseOrder.indexOf(this.currentPhase);
             var self = this;
             if (ci !== this.phaseOrder.length - 1) {
                 this.currentPhase = this.phaseOrder[ci + 1];
@@ -77,9 +139,11 @@
 
             switch (this.currentPhase) {
             case this.PHASE_INIT_PLAYER:
+                console.log('init grid player')
                 utils.info("Placez vos bateaux");
                 break;
             case this.PHASE_INIT_OPPONENT:
+                console.log('init grid computer')
                 this.wait();
                 utils.info("En attente de votre adversaire");
                 this.players[1].areShipsOk(function () {
@@ -88,23 +152,56 @@
                 });
                 break;
             case this.PHASE_PLAY_PLAYER:
+                console.log('play player')
                 utils.info("A vous de jouer, choisissez une case !");
                 break;
             case this.PHASE_PLAY_OPPONENT:
+                console.log('play computer')
                 utils.info("A votre adversaire de jouer...");
                 this.players[1].play();
                 break;
             case this.PHASE_GAME_OVER:
+                console.log('end game check')
                 // detection de la fin de partie
-                if (!this.gameIsOver()) {
+                if (!this.gameIsOver(this.miniGrid)) {
                     // le jeu n'est pas terminé on recommence un tour de jeu
-                    this.currentPhase = this.phaseOrder[this.playerTurnPhaseIndex];
+                    this.currentPhase = this.phaseOrder[this.playerTurnPhaseIndex -1];
+                    self.goNextPhase();
                 }
             }
         },
-        gameIsOver: function () {
-            
-            return false;
+        gameIsOver: function (playerGrid) 
+        {
+            let computerGrid = this.players[1].getGrid();
+            let checkComputer = 0;
+            let checkPlayer = 0
+            computerGrid.forEach(line => 
+                line.forEach(cell => {
+                    if (cell === 5 || cell === 6 || cell === 7 || cell === 8)
+                    {
+                        checkComputer++;
+                    }
+                })
+            )
+            playerGrid.forEach(line => 
+                line.forEach(cell => {
+                    if (cell === 1 || cell === 2 || cell === 3 || cell === 4)
+                    {
+                        checkPlayer++;
+                    }
+                })
+            )
+            if (checkPlayer === 0)
+            {
+                alert('Vous avez perdu...');
+                return true;
+            }
+            if (checkComputer === 0)
+            {
+                alert('Vous avez gagnez!');
+                return true;
+            }
+            else return false;
         },
         getPhase: function () {
             if (this.waiting) {
@@ -187,7 +284,6 @@
 
             // determine qui est l'attaquant et qui est attaqué
             var target = this.players.indexOf(from) === 0 ? this.players[1] : this.players[0];
-            console.log(target.grid)
             if (this.currentPhase === this.PHASE_PLAY_OPPONENT) {
                 this.players[0].checkSunkShip(target.grid);
                 msg += "Votre adversaire vous a... ";
@@ -216,7 +312,7 @@
                 setTimeout(function () {
                     self.stopWaiting();
                     self.goNextPhase();
-                }, 1);
+                }, 500);
             });
 
         },
