@@ -36,7 +36,7 @@
             this.computerButton = document.querySelector('.computer');
             this.playerButton = document.querySelector('.player');
             this.randomizedButton = document.querySelector('.randomized');
-            this.selectDom = document.querySelector('.select');
+            this.selectDom = document.querySelector('.selectOrder');
             let self = this;
 
             this.phaseOrder = [
