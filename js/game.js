@@ -125,6 +125,15 @@
 
             this.players[0].init();
             this.players[1].init();
+            let self = this;
+            let hardButton = document.querySelector('.hard');
+            let easyButton = document.querySelector('.easy');
+            hardButton.addEventListener('click', function(event){
+                self.players[1].setDifficulty(1);
+            })
+            easyButton.addEventListener('click', function(event){
+                self.players[1].setDifficulty(0);
+            })
         },
         goNextPhase: function () {
             // récupération du numéro d'index de la phase courante

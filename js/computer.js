@@ -8,17 +8,55 @@
         grid: [],
         tries: [],
         fleet: [],
+        difficulty: null,
         game: null,
         setGame: function (obj) {
             this.game = obj;
+        },
+        setDifficulty: function (difficulty) {
+            this.difficulty = difficulty;
         },
         getGrid: function ()
         {
             return this.grid;
         },
+        playHard: function(){
+            let col = Math.floor(Math.random() * (10 - 0) + 0);
+            let line = Math.floor(Math.random() * (10 - 0) + 0);
+            let GridCellDom = document.querySelectorAll('.cell');
+            let i = 0;
+            let self = this;
+            while (self.tries[col][line] === false || self.tries[col][line] === true)
+            {
+                if (self.tries[col][line] === true && self.tries[col][line - 1]  === 0)
+                    line--;
+                else if (self.tries[col][line] === true && self.tries[col][line + 1 ] === 0)
+                    line++;
+                else
+                {
+                    col = Math.floor(Math.random() * (10 - 0) + 0);
+                    line = Math.floor(Math.random() * (10 - 0) + 0);
+                }
+            }
+            console.log(this.tries);
+            self.game.fire(self, line, col, function (hasSucced) {
+                self.tries[col][line] = hasSucced;
+                self.tries.forEach(line => 
+                    line.forEach(cell => {
+                        if (cell === true)
+                            GridCellDom[i].style.backgroundColor = "black";
+                           i++;
+                       }))
+                });
+        },
         play: function () {
             var self = this;
             setTimeout(function () {
+                if (self.difficulty == 1)
+                {
+                    setTimeout(self.playHard(), 500)
+                    return 0;
+                }
                 let col = Math.floor(Math.random() * (10 - 0) + 0);
                 let line = Math.floor(Math.random() * (10 - 0) + 0);
                 let GridCellDom = document.querySelectorAll('.cell');

@@ -153,6 +153,7 @@
         setActiveShipPosition: function (x, y) {
             var ship = this.fleet[this.activeShip];
             var i = 0;
+            console.log(this.grid)
             if (ship.getId() == 1 || ship.getId() == 2)
             {
                 i = i -2;
